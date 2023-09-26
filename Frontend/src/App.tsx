@@ -1,39 +1,27 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-
-import socketIO from "socket.io-client";
-
-const ws = "http://localhost:3000";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import Button from "./components/Button";
+import Meeting from "./components/Meeting";
+import RoomProvider from "./context/RoomContext";
 
 function App() {
-  useEffect(() => {
-    socketIO(ws);
-  }, []);
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <RoomProvider>
+        <Routes>
+          <Route path="/" element={<Outlet />}>
+            <Route
+              index
+              element={
+                <div className="flex justify-center items-center w-screen h-screen">
+                  <Button />
+                </div>
+              }
+            />
+            <Route path="room/:roomId" element={<Meeting />} />
+          </Route>
+        </Routes>
+      </RoomProvider>
+    </BrowserRouter>
   );
 }
 
